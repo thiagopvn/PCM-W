@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Análise - Sistema PCM</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../mobile-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h1>Dashboard de Análise</h1>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div class="profile-icon" id="profileBtn" title="Meu Perfil" style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; transition: transform 0.2s;">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <button id="logoutBtn" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="grid grid-3">
+            <div class="stat-card primary">
+                <div class="stat-value" id="totalOS">0</div>
+                <div class="stat-label">Total de O.S.</div>
+            </div>
+            <div class="stat-card success">
+                <div class="stat-value" id="taxaConclusao">0%</div>
+                <div class="stat-label">Taxa de Conclusão</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="stat-value" id="tempoMedio">0h</div>
+                <div class="stat-label">Tempo Médio</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3 class="card-title">Desempenho dos Técnicos</h3>
+                <div class="chart-container">
+                    <canvas id="technicianChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Status Geral das O.S.</h3>
+                <div class="chart-container">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Serviços Mais Frequentes</h3>
+                <div class="chart-container">
+                    <canvas id="frequentServicesChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Tendência de Ordens por Mês</h3>
+                <div class="chart-container">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                Filtros de Análise
+            </div>
+            <div class="filters">
+                <select id="periodFilter" class="filter-select">
+                    <option value="all">Todo Período</option>
+                    <option value="7">Últimos 7 dias</option>
+                    <option value="30" selected>Últimos 30 dias</option>
+                    <option value="90">Últimos 90 dias</option>
+                    <option value="365">Último ano</option>
+                </select>
+
+                <select id="sectorFilter" class="filter-select">
+                    <option value="">Todos os Setores</option>
+                </select>
+
+                <button id="refreshBtn" class="btn btn-sm">
+                    <i class="fas fa-sync-alt"></i> Atualizar Dados
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="navbar-items">
+            <a href="../Telainicial/Telainicial.html" class="navbar-item">
+                <i class="fas fa-home navbar-icon"></i>
+                <span class="navbar-text">Início</span>
+            </a>
+            <a href="../OS/NovaOS.html" class="navbar-item">
+                <i class="fas fa-plus navbar-icon"></i>
+                <span class="navbar-text">Nova O.S.</span>
+            </a>
+            <a href="../OS/GerenciarOS.html" class="navbar-item">
+                <i class="fas fa-clipboard-list navbar-icon"></i>
+                <span class="navbar-text">Gerenciar</span>
+            </a>
+            <a href="../ManutencaoPrev/Prev.html" class="navbar-item">
+                <i class="fas fa-tools navbar-icon"></i>
+                <span class="navbar-text">Preventivas</span>
+            </a>
+            <a href="../Dashboard/dashboard.html" class="navbar-item active">
+                <i class="fas fa-chart-line navbar-icon"></i>
+                <span class="navbar-text">Dashboard</span>
+            </a>
+        </div>
+    </nav>
+
+    <script type="module" src="dashboard.js"></script>
+</body>
+</html>

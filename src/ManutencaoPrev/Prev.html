@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manutenção Preventiva - Sistema PCM</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../mobile-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h1>Manutenção Preventiva</h1>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div class="profile-icon" id="profileBtn" title="Meu Perfil" style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; transition: transform 0.2s;">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <button id="logoutBtn" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-title">
+                Tarefas Preventivas Programadas
+                <button id="addTaskBtn" class="btn btn-sm" style="float: right;">
+                    <i class="fas fa-plus"></i> Nova Tarefa
+                </button>
+            </div>
+
+            <div class="filters">
+                <select id="statusFilter" class="filter-select">
+                    <option value="">Todos os Status</option>
+                    <option value="pendente">Pendente</option>
+                    <option value="vencida">Vencida</option>
+                    <option value="concluida">Concluída</option>
+                </select>
+
+                <select id="equipmentFilter" class="filter-select">
+                    <option value="">Todos os Equipamentos</option>
+                </select>
+
+                <button id="clearFilters" class="btn btn-sm btn-secondary">
+                    <i class="fas fa-times"></i> Limpar Filtros
+                </button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div id="preventiveList" class="os-list">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Carregando tarefas preventivas...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="taskModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" id="closeModal">&times;</span>
+            <h2>Nova Tarefa Preventiva</h2>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label for="taskName" class="form-label">Nome da Tarefa *</label>
+                    <input type="text" id="taskName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="equipment" class="form-label">Equipamento *</label>
+                    <select id="equipment" class="form-control" required>
+                        <option value="">Selecione um equipamento...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="frequency" class="form-label">Frequência *</label>
+                    <select id="frequency" class="form-control" required>
+                        <option value="">Selecione...</option>
+                        <option value="daily">Diária</option>
+                        <option value="weekly">Semanal</option>
+                        <option value="monthly">Mensal</option>
+                        <option value="quarterly">Trimestral</option>
+                        <option value="semiannual">Semestral</option>
+                        <option value="annual">Anual</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="nextDate" class="form-label">Próxima Data *</label>
+                    <input type="date" id="nextDate" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="description" class="form-label">Descrição</label>
+                    <textarea id="description" class="form-control" rows="3"></textarea>
+                </div>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('taskModal').style.display='none'">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="navbar-items">
+            <a href="../Telainicial/Telainicial.html" class="navbar-item">
+                <i class="fas fa-home navbar-icon"></i>
+                <span class="navbar-text">Início</span>
+            </a>
+            <a href="../OS/NovaOS.html" class="navbar-item">
+                <i class="fas fa-plus navbar-icon"></i>
+                <span class="navbar-text">Nova O.S.</span>
+            </a>
+            <a href="../OS/GerenciarOS.html" class="navbar-item">
+                <i class="fas fa-clipboard-list navbar-icon"></i>
+                <span class="navbar-text">Gerenciar</span>
+            </a>
+            <a href="../ManutencaoPrev/Prev.html" class="navbar-item active">
+                <i class="fas fa-tools navbar-icon"></i>
+                <span class="navbar-text">Preventivas</span>
+            </a>
+            <a href="../Dashboard/dashboard.html" class="navbar-item">
+                <i class="fas fa-chart-line navbar-icon"></i>
+                <span class="navbar-text">Dashboard</span>
+            </a>
+        </div>
+    </nav>
+
+    <style>
+        .modal {
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: var(--card-background);
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: var(--dark-color);
+        }
+
+        .task-item {
+            background-color: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: var(--box-shadow);
+            border-left: 4px solid var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .task-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-item.vencida {
+            border-left-color: var(--danger-color);
+        }
+
+        .task-item.proxima {
+            border-left-color: var(--warning-color);
+        }
+
+        .task-item.concluida {
+            border-left-color: var(--success-color);
+            opacity: 0.7;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .task-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--dark-color);
+        }
+
+        .task-details {
+            font-size: 14px;
+            color: var(--secondary-color);
+        }
+
+        .task-detail-item {
+            margin-bottom: 5px;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+    </style>
+
+    <script type="module" src="Prev.js"></script>
+</body>
+</html>

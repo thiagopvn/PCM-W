@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Ordens de Serviço - Sistema PCM</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../mobile-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h1>Gerenciar Ordens de Serviço</h1>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div class="profile-icon" id="profileBtn" title="Meu Perfil" style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; transition: transform 0.2s;">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <button id="logoutBtn" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="top-action-bar">
+            <h2 class="page-title">Ordens de Serviço</h2>
+            <a href="NovaOS.html" class="btn btn-gradient">
+                <i class="fas fa-plus"></i> Nova O.S.
+            </a>
+        </div>
+
+        <div class="card">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Buscar por número da O.S., equipamento ou técnico...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+
+            <div class="filters">
+                <select id="statusFilter" class="filter-select">
+                    <option value="">Todos os Status</option>
+                    <option value="Aberta">Aberta</option>
+                    <option value="Pendente">Pendente</option>
+                    <option value="Em Andamento">Em Andamento</option>
+                    <option value="Fechada">Fechada</option>
+                </select>
+
+                <select id="technicianFilter" class="filter-select">
+                    <option value="">Todos os Técnicos</option>
+                </select>
+
+                <select id="priorityFilter" class="filter-select">
+                    <option value="">Todas as Prioridades</option>
+                    <option value="Baixa">Baixa</option>
+                    <option value="Média">Média</option>
+                    <option value="Alta">Alta</option>
+                    <option value="Urgente">Urgente</option>
+                </select>
+
+                <input type="date" id="startDateFilter" class="filter-select" title="Data inicial">
+                <input type="date" id="endDateFilter" class="filter-select" title="Data final">
+
+                <button id="clearFilters" class="btn btn-sm btn-secondary">
+                    <i class="fas fa-times"></i> Limpar Filtros
+                </button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                Lista de Ordens de Serviço
+            </div>
+
+            <div id="ordersList" class="os-list">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Carregando ordens...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="orderModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" id="closeModal">&times;</span>
+            <h2>Detalhes da Ordem de Serviço</h2>
+            <div id="orderDetails"></div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="navbar-items">
+            <a href="../Telainicial/Telainicial.html" class="navbar-item">
+                <i class="fas fa-home navbar-icon"></i>
+                <span class="navbar-text">Início</span>
+            </a>
+            <a href="NovaOS.html" class="navbar-item">
+                <i class="fas fa-plus navbar-icon"></i>
+                <span class="navbar-text">Nova O.S.</span>
+            </a>
+            <a href="GerenciarOS.html" class="navbar-item active">
+                <i class="fas fa-clipboard-list navbar-icon"></i>
+                <span class="navbar-text">Gerenciar</span>
+            </a>
+            <a href="../ManutencaoPrev/Prev.html" class="navbar-item">
+                <i class="fas fa-tools navbar-icon"></i>
+                <span class="navbar-text">Preventivas</span>
+            </a>
+            <a href="../Dashboard/dashboard.html" class="navbar-item">
+                <i class="fas fa-chart-line navbar-icon"></i>
+                <span class="navbar-text">Dashboard</span>
+            </a>
+        </div>
+    </nav>
+
+    <style>
+        .modal {
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: var(--card-background);
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: var(--dark-color);
+        }
+
+        .top-action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .page-title {
+            color: #333;
+            font-size: 24px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white !important;
+            border: none;
+            box-shadow: 0 4px 6px rgba(102, 126, 234, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.35);
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 20px;
+            }
+
+            .top-action-bar {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+
+    <script type="module" src="GerenciarOS.js"></script>
+</body>
+</html>

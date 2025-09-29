@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Controle - Sistema PCM</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../mobile-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h1>Painel de Controle</h1>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div class="profile-icon" id="profileBtn" title="Meu Perfil" style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; transition: transform 0.2s;">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <button id="logoutBtn" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2 class="card-title">Visão Rápida</h2>
+            <div class="grid grid-3">
+                <div class="stat-card primary">
+                    <div class="stat-value" id="osAbertas">0</div>
+                    <div class="stat-label">O.S. Abertas</div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-value" id="osPendentes">0</div>
+                    <div class="stat-label">O.S. Pendentes</div>
+                </div>
+                <div class="stat-card success">
+                    <div class="stat-value" id="osFechadas">0</div>
+                    <div class="stat-label">O.S. Fechadas</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Acesso Rápido</h2>
+            <div class="quick-access-grid">
+                <a href="../OS/NovaOS.html" class="quick-access-btn">
+                    <div class="quick-access-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <div>Nova O.S.</div>
+                </a>
+                <a href="../OS/GerenciarOS.html" class="quick-access-btn">
+                    <div class="quick-access-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div>Gerenciar O.S.</div>
+                </a>
+                <a href="../ManutencaoPrev/Prev.html" class="quick-access-btn">
+                    <div class="quick-access-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div>Preventivas</div>
+                </a>
+                <a href="../Dashboard/dashboard.html" class="quick-access-btn">
+                    <div class="quick-access-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div>Dashboard</div>
+                </a>
+                <a href="../equipamentos/equipamentos.html" class="quick-access-btn">
+                    <div class="quick-access-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div>Equipamentos</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Últimas Ordens de Serviço</h2>
+            <div id="recentOrdersList" class="os-list">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Carregando ordens...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="navbar-items">
+            <a href="../Telainicial/Telainicial.html" class="navbar-item active">
+                <i class="fas fa-home navbar-icon"></i>
+                <span class="navbar-text">Início</span>
+            </a>
+            <a href="../OS/NovaOS.html" class="navbar-item">
+                <i class="fas fa-plus navbar-icon"></i>
+                <span class="navbar-text">Nova O.S.</span>
+            </a>
+            <a href="../OS/GerenciarOS.html" class="navbar-item">
+                <i class="fas fa-clipboard-list navbar-icon"></i>
+                <span class="navbar-text">Gerenciar</span>
+            </a>
+            <a href="../ManutencaoPrev/Prev.html" class="navbar-item">
+                <i class="fas fa-tools navbar-icon"></i>
+                <span class="navbar-text">Preventivas</span>
+            </a>
+            <a href="../Dashboard/dashboard.html" class="navbar-item">
+                <i class="fas fa-chart-line navbar-icon"></i>
+                <span class="navbar-text">Dashboard</span>
+            </a>
+        </div>
+    </nav>
+
+    <script type="module" src="Telainicial.js"></script>
+</body>
+</html>

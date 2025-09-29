@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Ordem de Serviço - Sistema PCM</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../mobile-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h1>Cadastrar Ordem de Serviço</h1>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div class="profile-icon" id="profileBtn" title="Meu Perfil" style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; transition: transform 0.2s;">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <button id="logoutBtn" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <form id="osForm">
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label for="orderNumber" class="form-label">Número da O.S. *</label>
+                        <input type="text" id="orderNumber" class="form-control" placeholder="Ex: OS-2024-001" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="serviceDate" class="form-label">Data do Serviço *</label>
+                        <input type="date" id="serviceDate" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="serviceType" class="form-label">Tipo de Serviço *</label>
+                        <select id="serviceType" class="form-control" required>
+                            <option value="">Selecione...</option>
+                            <option value="Corretiva">Manutenção Corretiva</option>
+                            <option value="Preventiva">Manutenção Preventiva</option>
+                            <option value="Preditiva">Manutenção Preditiva</option>
+                            <option value="Instalação">Instalação</option>
+                            <option value="Inspeção">Inspeção</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="priority" class="form-label">Prioridade *</label>
+                        <select id="priority" class="form-control" required>
+                            <option value="">Selecione...</option>
+                            <option value="Baixa">Baixa</option>
+                            <option value="Média">Média</option>
+                            <option value="Alta">Alta</option>
+                            <option value="Urgente">Urgente</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="equipment" class="form-label">Equipamento *</label>
+                        <select id="equipment" class="form-control" required>
+                            <option value="">Selecione um equipamento...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location" class="form-label">Localização *</label>
+                        <input type="text" id="location" class="form-control" placeholder="Local do equipamento" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sector" class="form-label">Setor *</label>
+                        <select id="sector" class="form-control" required>
+                            <option value="">Selecione...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="technician" class="form-label">Técnico Responsável *</label>
+                        <select id="technician" class="form-control" required>
+                            <option value="">Selecione...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="requester" class="form-label">Solicitante *</label>
+                        <input type="text" id="requester" class="form-control" placeholder="Nome do solicitante" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status" class="form-label">Status Inicial</label>
+                        <select id="status" class="form-control">
+                            <option value="Aberta" selected>Aberta</option>
+                            <option value="Pendente">Pendente</option>
+                            <option value="Em Andamento">Em Andamento</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="problemDescription" class="form-label">Descrição do Problema *</label>
+                    <textarea id="problemDescription" class="form-control" rows="4"
+                              placeholder="Descreva detalhadamente o problema ou serviço a ser realizado..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="observations" class="form-label">Observações</label>
+                    <textarea id="observations" class="form-control" rows="3"
+                              placeholder="Observações adicionais (opcional)"></textarea>
+                </div>
+
+                <div id="messageAlert" class="alert" style="display: none;"></div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="window.history.back()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn" id="submitBtn">
+                        <i class="fas fa-save"></i> <span class="btn-text">Salvar O.S.</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="navbar-items">
+            <a href="../Telainicial/Telainicial.html" class="navbar-item">
+                <i class="fas fa-home navbar-icon"></i>
+                <span class="navbar-text">Início</span>
+            </a>
+            <a href="NovaOS.html" class="navbar-item active">
+                <i class="fas fa-plus navbar-icon"></i>
+                <span class="navbar-text">Nova O.S.</span>
+            </a>
+            <a href="GerenciarOS.html" class="navbar-item">
+                <i class="fas fa-clipboard-list navbar-icon"></i>
+                <span class="navbar-text">Gerenciar</span>
+            </a>
+            <a href="../ManutencaoPrev/Prev.html" class="navbar-item">
+                <i class="fas fa-tools navbar-icon"></i>
+                <span class="navbar-text">Preventivas</span>
+            </a>
+            <a href="../Dashboard/dashboard.html" class="navbar-item">
+                <i class="fas fa-chart-line navbar-icon"></i>
+                <span class="navbar-text">Dashboard</span>
+            </a>
+        </div>
+    </nav>
+
+    <script type="module" src="NovaOS.js"></script>
+</body>
+</html>
