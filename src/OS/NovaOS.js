@@ -1,5 +1,5 @@
 import { requireAuthAsync, logoutUser } from '../../lib/auth.js';
-import { createServiceOrder, getSectors, getMaintainers, getEquipments } from '../../lib/firestore.js?v=1';
+import { createServiceOrder, getSectors, getMaintainers, getEquipments, getServiceOrders } from '../../lib/firestore.js?v=1';
 
 document.addEventListener('DOMContentLoaded', async function() {
     if (!(await requireAuthAsync())) {

@@ -9,6 +9,7 @@ import {
 } from '../../lib/firestore.js';
 
 let charts = {};
+let dashboardData = {};
 
 document.addEventListener('DOMContentLoaded', async function() {
     if (!(await requireAuthAsync())) {
@@ -38,6 +39,7 @@ function setupEventListeners() {
     document.getElementById('refreshBtn').addEventListener('click', loadDashboardData);
     document.getElementById('periodFilter').addEventListener('change', loadDashboardData);
     document.getElementById('sectorFilter').addEventListener('change', loadDashboardData);
+    document.getElementById('exportExcelBtn').addEventListener('click', exportToExcel);
 }
 
 async function loadSectorFilter() {
@@ -79,6 +81,15 @@ async function loadDashboardData() {
         createStatusChart(statusResult.data);
         createFrequentServicesChart(servicesResult.data);
         createTrendChart(trendResult.data);
+
+        // Armazenar dados para exportação
+        dashboardData = {
+            stats: statsResult.data,
+            technicians: technicianResult.data,
+            status: statusResult.data,
+            services: servicesResult.data,
+            trend: trendResult.data
+        };
 
     } catch (error) {
         console.error('Erro ao carregar dados do dashboard:', error);
@@ -316,3 +327,84 @@ function createTrendChart(data) {
     });
 }
 
+function exportToExcel() {
+    try {
+        // Criar um novo workbook
+        const wb = XLSX.utils.book_new();
+
+        // 1. Aba de Estatísticas Gerais
+        const statsData = [
+            ['Estatísticas Gerais do Dashboard'],
+            [''],
+            ['Métrica', 'Valor'],
+            ['Total de O.S.', dashboardData.stats?.total || 0],
+            ['O.S. Fechadas', dashboardData.stats?.fechadas || 0],
+            ['Taxa de Conclusão', `${dashboardData.stats?.total > 0 ? Math.round((dashboardData.stats.fechadas / dashboardData.stats.total) * 100) : 0}%`],
+            ['Tempo Médio (horas)', dashboardData.stats?.averageTimeHours || 'N/A']
+        ];
+        const statsWs = XLSX.utils.aoa_to_sheet(statsData);
+        XLSX.utils.book_append_sheet(wb, statsWs, 'Estatísticas Gerais');
+
+        // 2. Aba de Desempenho dos Técnicos
+        const technicianRows = [['Desempenho dos Técnicos'], [''], ['Técnico', 'Concluídas', 'Pendentes', 'Abertas', 'Total']];
+        if (dashboardData.technicians) {
+            Object.keys(dashboardData.technicians).forEach(tech => {
+                const data = dashboardData.technicians[tech];
+                const total = (data.completed || 0) + (data.pending || 0) + (data.open || 0);
+                technicianRows.push([
+                    tech,
+                    data.completed || 0,
+                    data.pending || 0,
+                    data.open || 0,
+                    total
+                ]);
+            });
+        }
+        const techWs = XLSX.utils.aoa_to_sheet(technicianRows);
+        XLSX.utils.book_append_sheet(wb, techWs, 'Desempenho Técnicos');
+
+        // 3. Aba de Status Geral
+        const statusRows = [['Status Geral das O.S.'], [''], ['Status', 'Quantidade']];
+        if (dashboardData.status?.labels && dashboardData.status?.values) {
+            dashboardData.status.labels.forEach((label, index) => {
+                statusRows.push([label, dashboardData.status.values[index] || 0]);
+            });
+        }
+        const statusWs = XLSX.utils.aoa_to_sheet(statusRows);
+        XLSX.utils.book_append_sheet(wb, statusWs, 'Status Geral');
+
+        // 4. Aba de Serviços Mais Frequentes
+        const servicesRows = [['Serviços Mais Frequentes'], [''], ['Tipo de Serviço', 'Quantidade']];
+        if (dashboardData.services?.labels && dashboardData.services?.values) {
+            dashboardData.services.labels.forEach((label, index) => {
+                servicesRows.push([label, dashboardData.services.values[index] || 0]);
+            });
+        }
+        const servicesWs = XLSX.utils.aoa_to_sheet(servicesRows);
+        XLSX.utils.book_append_sheet(wb, servicesWs, 'Serviços Frequentes');
+
+        // 5. Aba de Tendência Mensal
+        const trendRows = [['Tendência de Ordens por Mês'], [''], ['Mês', 'Quantidade de O.S.']];
+        if (dashboardData.trend?.labels && dashboardData.trend?.values) {
+            dashboardData.trend.labels.forEach((label, index) => {
+                trendRows.push([label, dashboardData.trend.values[index] || 0]);
+            });
+        }
+        const trendWs = XLSX.utils.aoa_to_sheet(trendRows);
+        XLSX.utils.book_append_sheet(wb, trendWs, 'Tendência Mensal');
+
+        // Gerar nome do arquivo com data
+        const today = new Date();
+        const dateStr = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
+        const filename = `Dashboard_PCM_${dateStr}.xlsx`;
+
+        // Fazer download do arquivo
+        XLSX.writeFile(wb, filename);
+
+        // Mostrar mensagem de sucesso (se houver função de toast/mensagem)
+        console.log('Excel exportado com sucesso!');
+    } catch (error) {
+        console.error('Erro ao exportar Excel:', error);
+        alert('Erro ao exportar dados para Excel. Tente novamente.');
+    }
+}
