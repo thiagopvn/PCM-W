@@ -40,7 +40,7 @@
             </div>
 
             <div class="filters">
-                <select id="statusFilter" class="filter-select">
+                <select id="statusFilter" class="filter-select" style="flex: 1; min-width: 150px; max-width: 200px;">
                     <option value="">Todos os Status</option>
                     <option value="Aberta">Aberta</option>
                     <option value="Pendente">Pendente</option>
@@ -48,11 +48,11 @@
                     <option value="Fechada">Fechada</option>
                 </select>
 
-                <select id="technicianFilter" class="filter-select">
+                <select id="technicianFilter" class="filter-select" style="flex: 1; min-width: 150px; max-width: 200px;">
                     <option value="">Todos os Técnicos</option>
                 </select>
 
-                <select id="priorityFilter" class="filter-select">
+                <select id="priorityFilter" class="filter-select" style="flex: 1; min-width: 150px; max-width: 200px;">
                     <option value="">Todas as Prioridades</option>
                     <option value="Baixa">Baixa</option>
                     <option value="Média">Média</option>
@@ -60,10 +60,10 @@
                     <option value="Urgente">Urgente</option>
                 </select>
 
-                <input type="date" id="startDateFilter" class="filter-select" title="Data inicial">
-                <input type="date" id="endDateFilter" class="filter-select" title="Data final">
+                <input type="date" id="startDateFilter" class="filter-select" placeholder="Data inicial" style="flex: 1; min-width: 150px; max-width: 180px;" title="Data inicial">
+                <input type="date" id="endDateFilter" class="filter-select" placeholder="Data final" style="flex: 1; min-width: 150px; max-width: 180px;" title="Data final">
 
-                <button id="clearFilters" class="btn btn-sm btn-secondary">
+                <button id="clearFilters" class="btn btn-sm btn-secondary" style="white-space: nowrap;">
                     <i class="fas fa-times"></i> Limpar Filtros
                 </button>
             </div>
@@ -177,6 +177,34 @@
         .btn-gradient:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(102, 126, 234, 0.35);
+        }
+
+        /* Melhoria no layout dos filtros */
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* Campos de data com placeholder visual */
+        input[type="date"].filter-select {
+            position: relative;
+            color: #495057;
+        }
+
+        input[type="date"].filter-select::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+        }
+
+        /* Em telas menores, os campos ocupam largura total */
+        @media (max-width: 768px) {
+            .filter-select {
+                flex: 1 1 100% !important;
+                max-width: 100% !important;
+                min-width: 100% !important;
+            }
         }
 
         @media (max-width: 480px) {
