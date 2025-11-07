@@ -40,7 +40,7 @@
             </div>
 
             <div class="filters">
-                <select id="statusFilter" class="filter-select" style="flex: 1; min-width: 150px; max-width: 200px;">
+                <select id="statusFilter" class="filter-select">
                     <option value="">Todos os Status</option>
                     <option value="Aberta">Aberta</option>
                     <option value="Pendente">Pendente</option>
@@ -48,11 +48,11 @@
                     <option value="Fechada">Fechada</option>
                 </select>
 
-                <select id="technicianFilter" class="filter-select" style="flex: 1; min-width: 150px; max-width: 200px;">
+                <select id="technicianFilter" class="filter-select">
                     <option value="">Todos os Técnicos</option>
                 </select>
 
-                <select id="priorityFilter" class="filter-select" style="flex: 1; min-width: 150px; max-width: 200px;">
+                <select id="priorityFilter" class="filter-select">
                     <option value="">Todas as Prioridades</option>
                     <option value="Baixa">Baixa</option>
                     <option value="Média">Média</option>
@@ -60,10 +60,10 @@
                     <option value="Urgente">Urgente</option>
                 </select>
 
-                <input type="date" id="startDateFilter" class="filter-select" placeholder="Data inicial" style="flex: 1; min-width: 150px; max-width: 180px;" title="Data inicial">
-                <input type="date" id="endDateFilter" class="filter-select" placeholder="Data final" style="flex: 1; min-width: 150px; max-width: 180px;" title="Data final">
+                <input type="date" id="startDateFilter" class="filter-select date-filter" placeholder="Data inicial" title="Data inicial">
+                <input type="date" id="endDateFilter" class="filter-select date-filter" placeholder="Data final" title="Data final">
 
-                <button id="clearFilters" class="btn btn-sm btn-secondary" style="white-space: nowrap;">
+                <button id="clearFilters" class="btn btn-sm btn-secondary clear-filters-btn">
                     <i class="fas fa-times"></i> Limpar Filtros
                 </button>
             </div>
@@ -117,6 +117,29 @@
     </nav>
 
     <style>
+        /* Reset específico para Safari/iOS */
+        select,
+        input[type="date"] {
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            appearance: none !important;
+            margin: 0;
+            padding: 8px 12px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            border: 1px solid #ced4da;
+            outline: none;
+            font-family: inherit;
+            font-size: inherit;
+            line-height: normal;
+        }
+
+        /* Reset de box model para iOS */
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
         .modal {
             position: fixed;
             z-index: 2000;
@@ -188,22 +211,151 @@
             align-items: center;
         }
 
+        /* Estilos base para os filtros em desktop */
+        .filter-select {
+            flex: 1;
+            min-width: 150px;
+            max-width: 200px;
+        }
+
+        .date-filter {
+            max-width: 180px;
+        }
+
+        .clear-filters-btn {
+            white-space: nowrap;
+            flex: 0 0 auto;
+        }
+
+        /* Correção para Safari/iOS */
+        .filter-select,
+        .date-filter {
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            appearance: none !important;
+            box-sizing: border-box !important;
+            width: auto !important;
+        }
+
         /* Campos de data com placeholder visual */
         input[type="date"].filter-select {
             position: relative;
             color: #495057;
+            background-color: white;
         }
 
         input[type="date"].filter-select::-webkit-calendar-picker-indicator {
             cursor: pointer;
         }
 
+        /* Correção específica para iOS Safari */
+        @supports (-webkit-touch-callout: none) {
+            .filter-select,
+            .date-filter {
+                -webkit-appearance: none !important;
+                min-height: 44px; /* Touch target mínimo iOS */
+                font-size: 16px !important; /* Evita zoom no iOS */
+            }
+
+            select.filter-select {
+                background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+                background-repeat: no-repeat;
+                background-position: right 12px center;
+                background-size: 20px;
+                padding-right: 40px;
+            }
+        }
+
         /* Em telas menores, os campos ocupam largura total */
         @media (max-width: 768px) {
-            .filter-select {
+            .filters {
+                flex-direction: column;
+            }
+
+            .filter-select,
+            .date-filter {
                 flex: 1 1 100% !important;
                 max-width: 100% !important;
-                min-width: 100% !important;
+                min-width: 0 !important;
+                width: 100% !important;
+            }
+
+            .clear-filters-btn {
+                width: 100%;
+            }
+        }
+
+        /* Correção adicional para iPhone */
+        @media only screen
+        and (min-device-width: 320px)
+        and (max-device-width: 568px)
+        and (-webkit-min-device-pixel-ratio: 2) {
+            .filter-select,
+            .date-filter {
+                width: 100% !important;
+                max-width: none !important;
+                -webkit-box-sizing: border-box !important;
+                box-sizing: border-box !important;
+            }
+        }
+
+        /* iPhone 6, 6S, 7, 8 */
+        @media only screen
+        and (min-device-width: 375px)
+        and (max-device-width: 667px)
+        and (-webkit-min-device-pixel-ratio: 2) {
+            .filter-select,
+            .date-filter {
+                width: 100% !important;
+                max-width: none !important;
+            }
+        }
+
+        /* iPhone X, XS, 11 Pro */
+        @media only screen
+        and (min-device-width: 375px)
+        and (max-device-width: 812px)
+        and (-webkit-min-device-pixel-ratio: 3) {
+            .filter-select,
+            .date-filter {
+                width: 100% !important;
+                max-width: none !important;
+            }
+        }
+
+        /* iPhone XR, 11 */
+        @media only screen
+        and (min-device-width: 414px)
+        and (max-device-width: 896px)
+        and (-webkit-min-device-pixel-ratio: 2) {
+            .filter-select,
+            .date-filter {
+                width: 100% !important;
+                max-width: none !important;
+            }
+        }
+
+        /* iPhone 12, 12 Pro, 13, 13 Pro, 14, 14 Pro */
+        @media only screen
+        and (min-device-width: 390px)
+        and (max-device-width: 844px)
+        and (-webkit-min-device-pixel-ratio: 3) {
+            .filter-select,
+            .date-filter {
+                width: 100% !important;
+                max-width: none !important;
+            }
+        }
+
+        /* iPhone 12 Pro Max, 13 Pro Max, 14 Plus, 14 Pro Max */
+        @media only screen
+        and (min-device-width: 428px)
+        and (max-device-width: 926px)
+        and (-webkit-min-device-pixel-ratio: 3) {
+            .filter-select,
+            .date-filter {
+                width: 100% !important;
+                max-width: none !important;
             }
         }
 
